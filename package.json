@@ -1,0 +1,20 @@
+{
+  "name": "odrakriti",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Odrakriti \u2014 a Class 12 OSFIC demonstration prototype connecting Odisha's handloom traditions with contemporary styling.",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 0.0.0.0",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --test tests/*.test.mjs",
+    "test:unit": "node --test tests/requests.test.mjs tests/concept.test.mjs tests/catalog.test.mjs tests/provenance.test.mjs tests/contrast.test.mjs",
+    "test:e2e": "node --test tests/e2e.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3"
+  }
+}

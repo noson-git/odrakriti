@@ -1,0 +1,131 @@
+/* ============================================================
+   Odrakriti — Design Tokens
+   Derived at design time from the UI/UX Pro Max skill
+   (nature-distilled style + editorial typography pairing),
+   then validated for WCAG AA contrast in tests/contrast.test.mjs.
+   No external font or CDN dependency: stacks resolve to locally
+   installed fonts only.
+   ============================================================ */
+
+:root {
+  /* --- Surface: warm ivory family --- */
+  --c-ivory: #faf6ef;
+  --c-ivory-2: #f3ecdf;
+  --c-ivory-3: #e9dfd0;
+  --c-card: #fffdf9;
+
+  /* --- Ink: warm charcoal (never pure black) --- */
+  --c-ink: #241e19;
+  --c-ink-2: #4a3f36;
+  --c-ink-3: #6b5d51;
+
+  /* --- Primary: deep indigo (dye-pot indigo, restrained) --- */
+  --c-indigo: #2c3c66;
+  --c-indigo-deep: #1e2a49;
+  --c-indigo-soft: #e6eaf3;
+
+  /* --- Accent: terracotta --- */
+  --c-terracotta: #b4472a;
+  --c-terracotta-deep: #8f3620;
+  --c-terracotta-soft: #f7e6df;
+
+  /* --- Restrained natural accents --- */
+  --c-sage: #55674f;
+  --c-sage-soft: #e8ede3;
+  --c-ochre: #8a5b12;
+  --c-ochre-soft: #f6ecd8;
+
+  /* --- Semantic status (always paired with icon + text, never colour alone) --- */
+  --c-status-review-bg: #f2ecdd;
+  --c-status-review-fg: #6b4f10;
+  --c-status-review-line: #d9c68f;
+
+  --c-status-ok-bg: #e5efe1;
+  --c-status-ok-fg: #2f5330;
+  --c-status-ok-line: #a8c4a2;
+
+  --c-status-no-bg: #f8e3de;
+  --c-status-no-fg: #8b2d18;
+  --c-status-no-line: #dba79a;
+
+  --c-status-info-bg: #e6eaf3;
+  --c-status-info-fg: #25345c;
+  --c-status-info-line: #a9b6d6;
+
+  --c-focus: #1f4fa3;
+
+  /* --- Semantic aliases used by components --- */
+  --bg: var(--c-ivory);
+  --bg-alt: var(--c-ivory-2);
+  --surface: var(--c-card);
+  --fg: var(--c-ink);
+  --fg-muted: var(--c-ink-3);
+  --border: #ded2c0;
+  /* Functional control boundary (inputs, chips, choice tiles).
+     Verified >= 3:1 against card, page and alt surfaces — see
+     tests/contrast.test.mjs. Do not lighten without re-running it. */
+  --border-strong: #8a7358;
+  --primary: var(--c-indigo);
+  --primary-fg: #ffffff;
+  --accent: var(--c-terracotta);
+  --accent-fg: #ffffff;
+
+  /* --- Typography: local stacks only (no web fonts) --- */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-md: 1.0625rem; /* 17px */
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.4rem, 1.1rem + 1.1vw, 1.85rem);
+  --text-2xl: clamp(1.75rem, 1.25rem + 2.1vw, 2.6rem);
+  --text-3xl: clamp(2.15rem, 1.4rem + 3.4vw, 3.5rem);
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-body: 1.6;
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em;
+
+  /* --- Spacing scale (4px base) --- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  --container: 1200px;
+  --container-narrow: 860px;
+
+  /* --- Radii (organic, varied — nature-distilled guidance) --- */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 26px;
+  --r-pill: 999px;
+
+  /* --- Elevation: soft, natural --- */
+  --shadow-1: 0 1px 2px rgba(36, 30, 25, 0.06), 0 2px 6px rgba(36, 30, 25, 0.05);
+  --shadow-2: 0 2px 4px rgba(36, 30, 25, 0.07), 0 10px 24px rgba(36, 30, 25, 0.08);
+  --shadow-3: 0 4px 8px rgba(36, 30, 25, 0.08), 0 20px 44px rgba(36, 30, 25, 0.12);
+
+  /* --- Motion --- */
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --dur-slow: 320ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.3, 1);
+
+  /* --- Touch target --- */
+  --tap: 44px;
+}
