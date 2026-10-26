@@ -33,13 +33,16 @@ export class Router {
 
   parse(hash) {
     const raw = String(hash || "").replace(/^#/, "");
-    const [path, queryString = ""] = raw.split("?");
+    const [beforeQuery, queryString = ""] = raw.split("?");
+    // A trailing in-page fragment ("#/about#simulated") is not part of the
+    // route. Split it off so the route still matches, then scroll to it.
+    const [path, fragment = ""] = beforeQuery.split("#");
     const query = Object.fromEntries(new URLSearchParams(queryString));
-    return { path: path || "/", query };
+    return { path: path || "/", query, fragment };
   }
 
   resolve() {
-    const { path, query } = this.parse(window.location.hash);
+    const { path, query, fragment } = this.parse(window.location.hash);
     for (const route of this.routes) {
       const match = route.regex.exec(path);
       if (!match) continue;
@@ -47,16 +50,33 @@ export class Router {
       route.keys.forEach((key, i) => {
         params[key] = decodeURIComponent(match[i + 1]);
       });
-      this.current = { path, pattern: route.pattern, meta: route.meta, params, query };
+      this.current = {
+        path,
+        pattern: route.pattern,
+        meta: route.meta,
+        params,
+        query,
+        fragment,
+      };
       const markup = route.handler(params, query);
       this.root.innerHTML = markup;
       this.onNavigate(this.current);
+      this.scrollToFragment(fragment);
       return this.current;
     }
-    this.current = { path, pattern: null, meta: {}, params: {}, query };
+    this.current = { path, pattern: null, meta: {}, params: {}, query, fragment };
     this.root.innerHTML = this.notFound(path);
     this.onNavigate(this.current);
     return this.current;
+  }
+
+  /** Honour an in-page fragment after the route has rendered. */
+  scrollToFragment(fragment) {
+    if (!fragment) return;
+    const target = document.getElementById(fragment);
+    if (!target) return;
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.scrollIntoView({ block: "start" });
   }
 
   start() {

@@ -450,6 +450,72 @@ test("unknown routes render a helpful 404 with a way home", async () => {
   assert.ok(q(win, 'a[href="#/"]'));
 });
 
+test("an in-page fragment resolves its route instead of 404ing", async () => {
+  const win = await bootApp();
+  await go(win, "/about#simulated");
+  assert.doesNotMatch(bodyText(win), /No page at/i, "fragment must not break route matching");
+  assert.match(bodyText(win), /What is simulated/i);
+  assert.ok(q(win, "#simulated"), "the fragment has a real target element");
+});
+
+test("every in-app link resolves to a real route or a real fragment", async () => {
+  const win = await bootApp();
+  const routes = [
+    "/",
+    "/explore",
+    "/design/kotpad",
+    "/request/kotpad",
+    "/how",
+    "/about",
+    "/portal",
+    "/portal/request/ODK-DEMO-0001",
+    "/portal/request/ODK-DEMO-0001/brief",
+    "/no-such-route",
+  ];
+
+  const dead = [];
+  const seen = new Set();
+
+  for (const route of routes) {
+    await go(win, route);
+    for (const a of qq(win, 'main a[href^="#/"]')) {
+      const href = a.getAttribute("href");
+      if (seen.has(href)) continue;
+      seen.add(href);
+
+      const raw = href.replace(/^#/, "").split("?")[0];
+      const [path, fragment] = raw.split("#");
+
+      // Param routes are matched structurally, not by literal value.
+      const known =
+        /^\/$/.test(path) ||
+        /^\/explore$/.test(path) ||
+        /^\/how$/.test(path) ||
+        /^\/about$/.test(path) ||
+        /^\/portal$/.test(path) ||
+        /^\/design\/[a-z-]+$/.test(path) ||
+        /^\/request\/[a-z-]+$/.test(path) ||
+        /^\/sent\/ODK-/.test(path) ||
+        /^\/track\/ODK-/.test(path) ||
+        /^\/portal\/request\/ODK-[^/]+$/.test(path) ||
+        /^\/portal\/request\/ODK-[^/]+\/brief$/.test(path);
+      if (!known) {
+        dead.push(`unroutable: ${href} (found on ${route})`);
+        continue;
+      }
+
+      // A fragment must exist on the DESTINATION route, not the current one.
+      if (fragment) {
+        await go(win, raw.startsWith("/") ? raw : `/${raw}`);
+        if (win.document.getElementById(fragment) === null) {
+          dead.push(`missing #${fragment}: ${href} (found on ${route})`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(dead, [], `dead in-app links found:\n${dead.join("\n")}`);
+});
+
 test("skip link targets the main landmark", async () => {
   const win = await bootApp();
   const skip = q(win, ".skip-link");

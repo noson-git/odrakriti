@@ -196,7 +196,7 @@ export function aboutPage() {
         </ul>
       </div>
 
-      <div class="panel" style="margin-top:var(--sp-5)">
+      <div class="panel" id="simulated" style="margin-top:var(--sp-5)">
         <h3 style="font-size:var(--text-md)">${icon("bolt", { size: 18 })} What is simulated</h3>
         <dl class="dl">
           <dt>Sign-in</dt><dd>Role switching only (buyer / artisan). No accounts, no passwords, no server.</dd>

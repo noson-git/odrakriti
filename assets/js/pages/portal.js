@@ -34,10 +34,12 @@ import { garmentSVG, placeholderTileSVG } from "../lib/silhouettes.js";
 import { ENGINE } from "../lib/concept.js";
 
 function portalShell(active, body) {
+  // Every href is a real destination: a route, a route+query filter, or a
+  // route+fragment that has a matching id on that route. No placeholders.
   const items = [
-    ["#", "Queue", "inbox"],
-    ["#review", "Needs attention", "alert"],
-    ["#about-portal", "About this portal", "info"],
+    { key: "queue", href: "#/portal", label: "Queue", icon: "inbox" },
+    { key: "needs", href: "#/portal?tab=needs", label: "Needs attention", icon: "alert" },
+    { key: "about", href: "#/portal#about-portal", label: "About this portal", icon: "info" },
   ];
   return `<section class="section">
     <div class="container">
@@ -47,9 +49,9 @@ function portalShell(active, body) {
           <ul>
             ${items
               .map(
-                ([href, label, ic]) =>
-                  `<li><a href="${href === "#" ? "#/portal" : `#/portal${href}`}"
-                    ${active === href ? 'aria-current="page"' : ""}>${icon(ic, { size: 18 })} ${esc(label)}</a></li>`
+                (item) =>
+                  `<li><a href="${item.href}"
+                    ${active === item.key ? 'aria-current="page"' : ""}>${icon(item.icon, { size: 18 })} ${esc(item.label)}</a></li>`
               )
               .join("")}
           </ul>
@@ -193,7 +195,7 @@ export function portalPage(_params, query = {}) {
       <p class="tiny muted">${icon("alert", { size: 13 })} Nothing here implies a real order or a real partnership.</p>
     </div>`;
 
-  return portalShell("#", body);
+  return portalShell(tab === "needs" ? "needs" : "queue", body);
 }
 
 function stat(value, label, iconName) {
@@ -209,7 +211,7 @@ export function portalRequestPage(params) {
   const request = getRequest(params.id);
   if (!request) {
     return portalShell(
-      "#",
+      "queue",
       `<div class="empty"><p><strong>Request ${esc(params.id)} not found.</strong></p>
         <p><a class="btn btn--ghost" href="#/portal">${icon("arrowLeft", { size: 16 })} Back to queue</a></p></div>`
     );
@@ -455,7 +457,7 @@ export function portalRequestPage(params) {
       </div>
     </div>`;
 
-  return portalShell("#", body);
+  return portalShell("queue", body);
 }
 
 function customSummary(request) {
